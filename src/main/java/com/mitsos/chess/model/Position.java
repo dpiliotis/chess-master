@@ -8,8 +8,8 @@ public class Position {
 
   private static final Map<String, Position> CACHE = new HashMap<>();
 
-  private int axisX;
-  private int axisY;
+  private final int axisX;
+  private final int axisY;
 
   public static Position valueOf(int axisX, int axisY) {
     String key = axisX + "," + axisY;
@@ -25,16 +25,8 @@ public class Position {
     return axisX;
   }
 
-  public void setAxisX(int axisX) {
-    this.axisX = axisX;
-  }
-
   public int getAxisY() {
     return axisY;
-  }
-
-  public void setAxisY(int axisY) {
-    this.axisY = axisY;
   }
 
   @Override

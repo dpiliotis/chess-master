@@ -26,4 +26,9 @@ public class Knight extends Pawn {
   protected List<BiFunction<Position, Integer, Position>> getMoves() {
     return moves;
   }
+
+  @Override
+  public String toString() {
+    return "Knight";
+  }
 }

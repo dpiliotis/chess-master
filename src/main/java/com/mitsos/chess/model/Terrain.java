@@ -22,4 +22,8 @@ public class Terrain {
     return positions.contains(position);
   }
 
+  public int getLength() {
+    return LENGTH;
+  }
+
 }

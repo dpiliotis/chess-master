@@ -5,10 +5,13 @@ import com.mitsos.chess.model.Terrain;
 import com.mitsos.chess.pawn.Pawn;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +44,10 @@ public class RouteProcessor {
   private List<Position> processPaths(Pawn pawn, Terrain terrain, List<Deque<Position>> previousPaths, Position end) {
 
     List<Deque<Position>> newPaths = new ArrayList<>();
+    // this set is used for performance
+    Set<Position> previousPositions = previousPaths.stream()
+                                                   .flatMap(Collection::stream)
+                                                   .collect(Collectors.toCollection(HashSet::new));
 
     for (Deque<Position> previous : previousPaths) {
 
@@ -51,9 +58,12 @@ public class RouteProcessor {
       }
 
       next.stream()
-          .filter(position -> notExistsInOtherPaths(previousPaths, position))
+          .filter(p -> !previousPositions.contains(p))
           .map(position -> getPath(previous, position))
-          .forEach(newPaths::add);
+          .forEach(path -> {
+            newPaths.add(path);
+            previousPositions.addAll(path);
+          });
     }
 
     // mutate original paths
@@ -61,12 +71,6 @@ public class RouteProcessor {
     previousPaths.addAll(newPaths);
 
     return Collections.emptyList();
-  }
-
-  private boolean notExistsInOtherPaths(List<Deque<Position>> previousPaths, Position position) {
-
-    return previousPaths.stream() // if the terrain is too big consider parallel stream here
-                        .noneMatch(otherPaths -> otherPaths.contains(position));
   }
 
   private Deque<Position> getPath(Deque<Position> previous, Position next) {
