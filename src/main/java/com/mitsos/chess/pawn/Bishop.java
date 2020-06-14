@@ -1,18 +1,17 @@
 package com.mitsos.chess.pawn;
 
 import com.mitsos.chess.model.Position;
-import com.mitsos.chess.model.Terrain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class Bishop extends Pawn {
+public class Bishop extends AbstractPawn {
 
   private final List<BiFunction<Position, Integer, Position>> moves = new ArrayList<>();
 
-  public Bishop(Terrain terrain) {
-    super(terrain.getLength());
+  public Bishop(int range) {
+    super(range);
     moves.add((p,r) -> createMove(p, 1, 1, r));
     moves.add((p,r) -> createMove(p, 1, -1, r));
     moves.add((p,r) -> createMove(p, -1, 1, r));
@@ -20,8 +19,17 @@ public class Bishop extends Pawn {
   }
 
   @Override
-  protected List<BiFunction<Position, Integer, Position>> getMoves() {
+  public List<BiFunction<Position, Integer, Position>> getMoves() {
     return moves;
+  }
+
+  @Override
+  public boolean validDestination(Position start, Position end) {
+
+    int x = Integer.sum(end.getAxisX(), start.getAxisX()) % 2;
+    int y = Integer.sum(end.getAxisY(), start.getAxisY()) % 2;
+
+    return x == y;
   }
 
   @Override

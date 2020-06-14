@@ -2,22 +2,37 @@ package com.mitsos.chess;
 
 import com.mitsos.chess.model.Position;
 import com.mitsos.chess.model.Terrain;
+import com.mitsos.chess.pawn.Pawn;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
 public class Validator {
 
-  public boolean validate(Position start, Position stop, Terrain terrain) {
+  /**
+   * Validates if the input data are valid and the path could be build.
+   *
+   * @param start starting position
+   * @param end final position
+   * @param pawn the pawn that is going to move
+   * @param terrain chess terrain
+   * @return true if all parameters are valid, false otherwise.
+   */
+  public boolean validate(Position start, Position end, Terrain terrain, Pawn pawn) {
 
     Objects.requireNonNull(terrain);
     Objects.requireNonNull(start);
-    Objects.requireNonNull(stop);
+    Objects.requireNonNull(end);
+    Objects.requireNonNull(pawn);
 
-    if (start.equals(stop)) {
+    if (start.equals(end)) {
       return false;
     }
 
-    return Stream.of(start, stop).allMatch(terrain::isValidPosition);
+    if (!Stream.of(start, end).allMatch(terrain::isValidPosition)) {
+      return false;
+    }
+
+    return pawn.validDestination(start, end);
   }
 }

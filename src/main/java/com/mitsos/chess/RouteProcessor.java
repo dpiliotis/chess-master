@@ -20,10 +20,10 @@ public class RouteProcessor {
   /**
    * Returns a correct path with the minimum number of moves.
    *
-   * @param start
-   * @param end
-   * @param pawn
-   * @param terrain
+   * @param start starting position
+   * @param end final position
+   * @param pawn the pawn that is going to move
+   * @param terrain chess terrain
    * @return critical path
    */
   public List<Position> createPath(Position start, Position end, Pawn pawn, Terrain terrain) {
@@ -35,8 +35,7 @@ public class RouteProcessor {
 
     do {
       correctPath = processPaths(pawn, terrain, paths, end);
-    }
-    while (correctPath.isEmpty());
+    } while (correctPath.isEmpty());
 
     return correctPath;
   }

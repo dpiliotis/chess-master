@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class Knight extends Pawn {
+public class Knight extends AbstractPawn {
 
   private final List<BiFunction<Position, Integer, Position>> moves = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class Knight extends Pawn {
   }
 
   @Override
-  protected List<BiFunction<Position, Integer, Position>> getMoves() {
+  public List<BiFunction<Position, Integer, Position>> getMoves() {
     return moves;
   }
 

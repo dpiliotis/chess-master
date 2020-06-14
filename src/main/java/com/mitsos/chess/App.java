@@ -8,42 +8,24 @@ import com.mitsos.chess.pawn.Pawn;
 import com.mitsos.chess.pawn.Queen;
 import com.mitsos.chess.pawn.Tower;
 
-import java.util.List;
-
 public class App {
 
   public static void main(String[] args) {
 
-    Terrain terrain = new Terrain();
+    Terrain terrain = Terrain.getInstance();
+    Position start = Position.from(1, 1);
+    Position end = Position.from(8,8);
+
     Pawn knight = new Knight();
-    Pawn queen = new Queen(terrain);
-    Pawn tower = new Tower(terrain);
-    Pawn bishop = new Bishop(terrain);
+    Pawn queen = new Queen(terrain.getLength());
+    Pawn tower = new Tower(terrain.getLength());
+    Pawn bishop = new Bishop(terrain.getLength());
 
-    Position start = Position.valueOf(1, 1);
-    Position end = Position.valueOf(8,8);
+    ChessService service = new ChessService(new RouteProcessor(), new Validator());
 
-    Validator validator = new Validator();
-    if (!validator.validate(start, end, terrain)) {
-      System.out.println("Invalid input...");
-      return;
-    }
-
-    calculatePath(terrain, knight, start, end);
-    calculatePath(terrain, queen, start, end);
-    calculatePath(terrain, bishop, start, end);
-    calculatePath(terrain, tower, start, end);
-  }
-
-  private static void calculatePath(Terrain terrain, Pawn pawn, Position start, Position end) {
-    long init = System.currentTimeMillis();
-    RouteProcessor processor = new RouteProcessor();
-
-    List<Position> path = processor.createPath(start, end, pawn, terrain);
-
-    System.out.println("Pawn: " + pawn);
-    System.out.println("Route size: " + path.size());
-    System.out.println("Got a route: " + path);
-    System.out.println("Job done in " + (System.currentTimeMillis() - init) + "ms");
+    service.calculatePath(start, end, knight, terrain);
+    service.calculatePath(start, end, queen, terrain);
+    service.calculatePath(start, end, bishop, terrain);
+    service.calculatePath(start, end, tower, terrain);
   }
 }

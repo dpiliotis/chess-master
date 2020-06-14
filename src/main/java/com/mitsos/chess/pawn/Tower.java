@@ -1,18 +1,17 @@
 package com.mitsos.chess.pawn;
 
 import com.mitsos.chess.model.Position;
-import com.mitsos.chess.model.Terrain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class Tower extends Pawn {
+public class Tower extends AbstractPawn {
 
   private final List<BiFunction<Position, Integer, Position>> moves = new ArrayList<>();
 
-  public Tower(Terrain terrain) {
-    super(terrain.getLength());
+  public Tower(int range) {
+    super(range);
     moves.add((p,r) -> createMove(p, 1, 0, r));
     moves.add((p,r) -> createMove(p, 0, 1, r));
     moves.add((p,r) -> createMove(p, -1, 0, r));
@@ -20,7 +19,7 @@ public class Tower extends Pawn {
   }
 
   @Override
-  protected List<BiFunction<Position, Integer, Position>> getMoves() {
+  public List<BiFunction<Position, Integer, Position>> getMoves() {
     return moves;
   }
 

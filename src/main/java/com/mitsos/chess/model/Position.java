@@ -11,7 +11,7 @@ public class Position {
   private final int axisX;
   private final int axisY;
 
-  public static Position valueOf(int axisX, int axisY) {
+  public static Position from(int axisX, int axisY) {
     String key = axisX + "," + axisY;
     return CACHE.computeIfAbsent(key, k -> new Position(axisX, axisY));
   }
