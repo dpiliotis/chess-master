@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class Tower extends AbstractPawn {
+public class Rook extends AbstractPawn {
 
   private final List<BiFunction<Position, Integer, Position>> moves = new ArrayList<>();
 
-  public Tower(int range) {
+  public Rook(int range) {
     super(range);
     moves.add((p,r) -> createMove(p, 1, 0, r));
     moves.add((p,r) -> createMove(p, 0, 1, r));

@@ -20,10 +20,10 @@ public class Validator {
    */
   public boolean validate(Position start, Position end, Terrain terrain, Pawn pawn) {
 
-    Objects.requireNonNull(terrain);
-    Objects.requireNonNull(start);
-    Objects.requireNonNull(end);
-    Objects.requireNonNull(pawn);
+    Objects.requireNonNull(terrain, "Terrain cannot be null");
+    Objects.requireNonNull(start, "Starting point does not exists");
+    Objects.requireNonNull(end, "Destination point does not exists");
+    Objects.requireNonNull(pawn, "Pawn is not specified");
 
     if (start.equals(end)) {
       return false;

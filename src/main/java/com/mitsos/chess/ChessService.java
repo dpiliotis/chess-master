@@ -50,11 +50,6 @@ public class ChessService {
   }
 
   private String formatPath(List<Position> path) {
-    return path.stream().map(this::intToString).collect(Collectors.joining(" -> "));
-  }
-
-  private String intToString(Position position) {
-    char letter = (char) ('A' + position.getAxisX() - 1);
-    return String.valueOf(letter) + position.getAxisY();
+    return path.stream().map(Position::prettyPrint).collect(Collectors.joining(" -> "));
   }
 }
