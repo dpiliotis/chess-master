@@ -5,22 +5,18 @@ import java.util.List;
 
 public class Terrain {
 
-  private static final int LENGTH = 8;
-  private static final Terrain INSTANCE = new Terrain();
-
+  private final int length;
   private final List<Position> positions = new ArrayList<>();
 
-  private Terrain() {
+  public Terrain(int length) {
 
-    for (int x = 1; x <= LENGTH; x++) {
-      for (int y = 1; y <= LENGTH; y++) {
+    this.length = length;
+
+    for (int x = 1; x <= length; x++) {
+      for (int y = 1; y <= length; y++) {
         positions.add(Position.from(x, y));
       }
     }
-  }
-
-  public static Terrain getInstance() {
-    return INSTANCE;
   }
 
   public boolean isValidPosition(Position position) {
@@ -28,7 +24,7 @@ public class Terrain {
   }
 
   public int getLength() {
-    return LENGTH;
+    return length;
   }
 
 }

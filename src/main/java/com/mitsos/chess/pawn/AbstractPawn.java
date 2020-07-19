@@ -5,6 +5,7 @@ import com.mitsos.chess.model.Terrain;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,7 +29,7 @@ public abstract class AbstractPawn implements Pawn {
     return true;
   }
 
-  public List<Position> moves(Position position, Terrain terrain) {
+  public Set<Position> moves(Position position, Terrain terrain) {
 
     return IntStream
         .rangeClosed(1, getRange())
@@ -36,7 +37,7 @@ public abstract class AbstractPawn implements Pawn {
         .map(r -> getMoves().stream().map(f -> f.apply(position, r)).collect(Collectors.toList()))
         .flatMap(Collection::stream)
         .filter(terrain::isValidPosition)
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
   protected Position createMove(Position position, int newX, int newY, int range) {

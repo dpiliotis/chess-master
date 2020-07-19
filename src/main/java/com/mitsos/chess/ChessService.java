@@ -1,5 +1,6 @@
 package com.mitsos.chess;
 
+import com.mitsos.chess.model.ChessFacade;
 import com.mitsos.chess.model.Position;
 import com.mitsos.chess.model.Terrain;
 import com.mitsos.chess.pawn.Pawn;
@@ -50,6 +51,6 @@ public class ChessService {
   }
 
   private String formatPath(List<Position> path) {
-    return path.stream().map(Position::prettyPrint).collect(Collectors.joining(" -> "));
+    return path.stream().map(ChessFacade::prettyPrint).collect(Collectors.joining(" -> "));
   }
 }

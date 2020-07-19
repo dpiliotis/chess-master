@@ -1,5 +1,6 @@
 package com.mitsos.chess;
 
+import com.mitsos.chess.model.ChessFacade;
 import com.mitsos.chess.model.Position;
 import com.mitsos.chess.model.Terrain;
 import com.mitsos.chess.pawn.Bishop;
@@ -18,7 +19,28 @@ public class App {
 
   public static void main(String[] args) {
 
-    Terrain terrain = Terrain.getInstance();
+    //calculateEdgeToEdge(200);
+
+    // OR
+
+    launchChessCalculator();
+  }
+
+  private static void calculateEdgeToEdge(int length) {
+
+    Terrain terrain = new Terrain(length);
+    Pawn pawn = new Knight();
+    Position start = Position.from(1, 1);
+    Position end = Position.from(terrain.getLength(), terrain.getLength());
+
+    ChessService service = new ChessService(new RouteProcessor(), new Validator());
+
+    service.calculatePath(start, end, pawn, terrain);
+  }
+
+  private static void launchChessCalculator() {
+
+    Terrain terrain = ChessFacade.getTable();
     Pawn knight = new Knight();
     Pawn queen = new Queen(terrain.getLength());
     Pawn rook = new Rook(terrain.getLength());
@@ -26,7 +48,7 @@ public class App {
 
     ChessService service = new ChessService(new RouteProcessor(), new Validator());
 
-    Pawn test;
+    Pawn pawn;
     firstScreen();
 
     try (Scanner in = new Scanner(System.in)) {
@@ -36,16 +58,16 @@ public class App {
         String input = in.nextLine();
         switch (input) {
           case "1":
-            test = knight;
+            pawn = knight;
             break;
           case "2":
-            test = queen;
+            pawn = queen;
             break;
           case "3":
-            test = bishop;
+            pawn = bishop;
             break;
           case "4":
-            test = rook;
+            pawn = rook;
             break;
           case "5": return;
           default:
@@ -54,11 +76,11 @@ public class App {
         }
 
         logger.info("Set starting point (A1 to H8):");
-        Position start = Position.from(in.nextLine());
+        Position start = ChessFacade.positionFrom(in.nextLine());
         logger.info("Set destination point (A1 to H8):");
-        Position end = Position.from(in.nextLine());
+        Position end = ChessFacade.positionFrom(in.nextLine());
 
-        service.calculatePath(start, end, test, terrain);
+        service.calculatePath(start, end, pawn, terrain);
       }
     } catch (RuntimeException e) {
       logger.error("Something went wrong...", e);

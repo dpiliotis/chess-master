@@ -5,7 +5,6 @@ import com.mitsos.chess.model.Terrain;
 import com.mitsos.chess.pawn.Pawn;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
@@ -30,39 +29,39 @@ public class RouteProcessor {
 
     List<Position> correctPath;
     List<Deque<Position>> paths = new ArrayList<>();
+    Set<Position> previousPositions = new HashSet<>();
 
     paths.add(new LinkedList<>(Collections.singleton(start))); // set first path
 
     do {
-      correctPath = processPaths(pawn, terrain, paths, end);
+      correctPath = processPaths(pawn, terrain, end, paths, previousPositions);
     } while (correctPath.isEmpty());
 
     return correctPath;
   }
 
-  private List<Position> processPaths(Pawn pawn, Terrain terrain, List<Deque<Position>> previousPaths, Position end) {
+  private List<Position> processPaths(Pawn pawn,
+                                      Terrain terrain,
+                                      Position end,
+                                      List<Deque<Position>> previousPaths,
+                                      Set<Position> previousPositions) {
 
     List<Deque<Position>> newPaths = new ArrayList<>();
-    // this set is used for performance
-    Set<Position> previousPositions = previousPaths.stream()
-                                                   .flatMap(Collection::stream)
-                                                   .collect(Collectors.toCollection(HashSet::new));
 
     for (Deque<Position> previous : previousPaths) {
 
-      List<Position> next = pawn.moves(previous.getLast(), terrain);
+      Set<Position> nextMoves = pawn.moves(previous.getLast(), terrain);
 
-      if (next.contains(end)) {
-        return new ArrayList<>(getPath(previous, end));
+      if (nextMoves.contains(end)) {
+        return new ArrayList<>(buildPath(previous, end));
       }
 
-      next.stream()
-          .filter(p -> !previousPositions.contains(p))
-          .map(position -> getPath(previous, position))
-          .forEach(path -> {
-            newPaths.add(path);
-            previousPositions.addAll(path);
-          });
+      nextMoves.stream()
+               .filter(position -> !previousPositions.contains(position))
+               .forEach(position -> {
+                 newPaths.add(buildPath(previous, position));
+                 previousPositions.add(position);
+               });
     }
 
     // mutate original paths
@@ -72,7 +71,7 @@ public class RouteProcessor {
     return Collections.emptyList();
   }
 
-  private Deque<Position> getPath(Deque<Position> previous, Position next) {
+  private Deque<Position> buildPath(Deque<Position> previous, Position next) {
     return Stream.concat(previous.stream(), Stream.of(next))
                  .collect(Collectors.toCollection(LinkedList::new));
   }

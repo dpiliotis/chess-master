@@ -25,8 +25,8 @@ public class RouteProcessorTest {
     Position end = Position.from(8,8);
     AbstractPawn pawn = mock(AbstractPawn.class);
 
-    when(pawn.moves(start, terrain)).thenReturn(Collections.singletonList(intermediate));
-    when(pawn.moves(intermediate, terrain)).thenReturn(Collections.singletonList(end));
+    when(pawn.moves(start, terrain)).thenReturn(Collections.singleton(intermediate));
+    when(pawn.moves(intermediate, terrain)).thenReturn(Collections.singleton(end));
 
     // when
     List<Position> path = processor.createPath(start, end, pawn, terrain);
